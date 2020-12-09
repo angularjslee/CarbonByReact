@@ -537,7 +537,7 @@ class App extends React.Component {
         </Header>
 
         {/* Left Panel bar */}
-        <SideNav
+        {/* <SideNav
           isFixedNav
           expanded={true}
           isChildOfHeader={false}
@@ -556,7 +556,7 @@ class App extends React.Component {
               </SideNavMenuItem>
             </SideNavMenu>
           </SideNavItems>
-        </SideNav>
+        </SideNav> */}
           {/* Chart */}          
 
           {/* <div class="container">		
@@ -602,65 +602,9 @@ class App extends React.Component {
             </div>							
           </div> */}
 
-          {/* Progress Indicator */}
-          {/* <ProgressIndicator
-            vertical={boolean('Vertical (vertical)', false)}
-            currentIndex={number('Current progress (currentIndex)', 1)}
-            spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
-            <ProgressStep
-              label={text('Label (label)', 'First step')}
-              description="Step 1: Getting started with Carbon Design System"
-              secondaryLabel="Optional label"
-            />
-            <ProgressStep
-              label="Second step with tooltip"
-              description="Step 2: Getting started with Carbon Design System"
-              renderLabel={() => (
-                <Tooltip
-                  direction="bottom"
-                  showIcon={false}
-                  // triggerClassName={`${prefix}--progress-label`}
-                  triggerText={'Second step with tooltip'}
-                  tooltipId="tooltipId-0">
-                  <p>Overflow tooltip content.</p>
-                </Tooltip>
-              )}
-            />
-            <ProgressStep
-              label="Third step with tooltip"
-              description="Step 3: Getting started with Carbon Design System"
-              renderLabel={() => (
-                <Tooltip
-                  direction="bottom"
-                  showIcon={false}
-                  // triggerClassName={`${prefix}--progress-label`}
-                  triggerText={'Third step with tooltip'}
-                  tooltipId="tooltipId-1">
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi
-                    consequuntur hic ratione aliquid cupiditate, nesciunt saepe iste
-                    blanditiis cumque maxime tenetur veniam est illo deserunt sint quae
-                    pariatur. Laboriosam, consequatur.
-                  </p>
-                </Tooltip>
-              )}
-            />
-            <ProgressStep
-              label="Fourth step"
-              description="Step 4: Getting started with Carbon Design System"
-              invalid
-              secondaryLabel="Example invalid step"
-            />
-            <ProgressStep
-              label="Fifth step"
-              description="Step 5: Getting started with Carbon Design System"
-              disabled
-            />
-          </ProgressIndicator> */}
-
 
           {/* StruturedList */}
-          <div class="container">
+          {/* <div class="container">
             <br></br>
             <br></br>
             <br></br>
@@ -681,9 +625,78 @@ class App extends React.Component {
                 {structuredListBodyRowGenerator(4)}
               </StructuredListBody>
             </StructuredListWrapper>
-          </div>
+          </div> */}
 
 
+
+
+          {/* Progress Indicator */}
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <ProgressIndicator
+            vertical={boolean('Vertical (vertical)', false)}
+            currentIndex={number('Current progress (currentIndex)', 1)}
+            spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
+            <ProgressStep
+              label={text('Label (label)', 'Release')}
+              description="Finished"
+              secondaryLabel="Created"
+            />
+            <ProgressStep
+              label="QUA"
+              description="Running"
+              secondaryLabel="3 Created"
+              renderLabel={() => (
+                <Tooltip  
+                  direction="bottom"
+                  showIcon={false}
+                  triggerClassName={`${prefix}--progress-label`}
+                  triggerText={'Environment'}
+                  tooltipId="tooltipId-0">
+                  <p>Overflow tooltip content.</p>
+                </Tooltip>
+              )}
+            />
+            <ProgressStep
+              label="Tasks"
+              description="Await"
+              secondaryLabel="5 Created"
+              renderLabel={() => (
+                <Tooltip
+                  direction="top"
+                  showIcon={false}
+                  triggerClassName={`${prefix}--progress-label`}
+                  triggerText={'Tasks'}
+                  tooltipId="tooltipId-1">
+                  <p>Opened</p>
+                </Tooltip>
+              )}
+            />
+            <ProgressStep
+              label="Deployment Profile"
+              description="Failed"
+              description="Creating"
+              invalid
+              secondaryLabel="Long"
+            />
+            <ProgressStep
+              label="Last Promotion"
+              secondaryLabel="new date()"
+              disabled
+            />
+            <ProgressStep
+              label="Last Deployment"
+              secondaryLabel="new date()"
+              disabled
+            />
+          </ProgressIndicator>
 
     </div>
     );
