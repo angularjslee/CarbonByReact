@@ -16,6 +16,17 @@ import { Search20, Notification20, AppSwitcher20 } from '@carbon/icons-react';
 import { ProgressIndicator, ProgressStep, Tooltip} from 'carbon-components-react';
 import { withKnobs, number, boolean, text } from '@storybook/addon-knobs';
 
+import {
+  StructuredListWrapper,
+  StructuredListHead,
+  StructuredListBody,
+  StructuredListRow,
+  StructuredListInput,
+  StructuredListCell,
+} from 'carbon-components-react';
+import { CheckmarkFilled16 } from '@carbon/icons-react';
+import { settings } from 'carbon-components';
+
 
 // import { action } from '@storybook/addon-actions';
 // npm install --save @storybook/addon-actions
@@ -139,8 +150,38 @@ const Fade16 = () => (
   </svg>
 );
 
-// const { prefix } = settings;
+const { prefix } = settings;
 
+
+const structuredListBodyRowGenerator = (numRows) => {
+  return Array.apply(null, Array(numRows)).map((n, i) => (
+    <StructuredListRow label key={`row-${i}`}>
+      <StructuredListCell>Time {i}</StructuredListCell>
+      <StructuredListCell>
+          <h5>Request to promote</h5>
+          <div>Promote to QUA in G1/A1/R1</div>
+          <span>Requested by Ada White</span>
+      </StructuredListCell>
+      <StructuredListCell>
+        <a>Detail</a>
+      </StructuredListCell>
+      <StructuredListInput
+        id={`row-${i}`}
+        value={`row-${i}`}
+        title={`row-${i}`}
+        name="row-0"
+        defaultChecked={!i || null}
+      />
+      <StructuredListCell>
+        <CheckmarkFilled16
+          className={`${prefix}--structured-list-svg`}
+          aria-label="select an option">
+          <title>select an option</title>
+        </CheckmarkFilled16>
+      </StructuredListCell>
+    </StructuredListRow>
+  ));
+};
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -518,7 +559,7 @@ class App extends React.Component {
         </SideNav>
           {/* Chart */}          
 
-          <div class="container">		
+          {/* <div class="container">		
             <div class="row">							
               <div class="col-md-4">
                   <StackedBarChart
@@ -559,7 +600,7 @@ class App extends React.Component {
                 />
               </div>							
             </div>							
-          </div>
+          </div> */}
 
           {/* Progress Indicator */}
           {/* <ProgressIndicator
@@ -616,6 +657,33 @@ class App extends React.Component {
               disabled
             />
           </ProgressIndicator> */}
+
+
+          {/* StruturedList */}
+          <div class="container">
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <StructuredListWrapper selection>
+              <StructuredListHead>
+                <StructuredListRow head>
+                  <StructuredListCell head>Pending Requests</StructuredListCell>
+                  <StructuredListCell head>{' '}</StructuredListCell>
+                  <StructuredListCell head>{' '}</StructuredListCell>
+                  <StructuredListCell head>
+                    <span> n to be completed</span>
+                  </StructuredListCell> 
+                </StructuredListRow>
+              </StructuredListHead>
+              <StructuredListBody>
+                {structuredListBodyRowGenerator(4)}
+              </StructuredListBody>
+            </StructuredListWrapper>
+          </div>
+
+
 
     </div>
     );
