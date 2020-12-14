@@ -5,7 +5,7 @@ import { Button } from 'carbon-components-react'
 import '../node_modules/carbon-components/scss/globals/scss/styles.scss'
 import { AccordionItem } from 'carbon-components-react/lib/components/Accordion';
 
-import { StackedBarChart, SimpleBarChart, PieChart, LineChart, ComboChart, GaugeChart } from "@carbon/charts-react";
+import { StackedBarChart, GroupedBarChart, PieChart, LineChart, ComboChart, GaugeChart } from "@carbon/charts-react";
 import "@carbon/charts/styles.css";
 import React from 'react';
 import {Header, HeaderName, HeaderGlobalBar, HeaderGlobalAction } from 'carbon-components-react';
@@ -27,12 +27,60 @@ import {
 import { CheckmarkFilled16 } from '@carbon/icons-react';
 import { settings } from 'carbon-components';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
+import { Grid, Row, Column } from 'carbon-components-react';
+
+
+
+// Bootstrap
+import { ButtonGroup } from 'react-bootstrap';
+// import Button from 'react-bootstrap/lib/Button';
+// format is not correct 
+
 
 // import { action } from '@storybook/addon-actions';
 // npm install --save @storybook/addon-actions
+function DemoContent({ children }) {				
+      return (				
+        <div className="outside">				
+          <div className="inside">{children}</div>				
+        </div>				
+      );				
+}
+
+function ChartKPI({}) {
+    return (
+      <div>
+        <div style={styleDivStatus}>
+          <h4>{KPI.location}-{KPI.server}</h4>
+          <p>{KPI.context}</p>
+          <p>{KPI.server}</p>
+          <i>{KPI.statusIcon}</i>
+          <span>{KPI.status}</span>
+          <span>Updated on {KPI.date}</span>
+          <i>{KPI.update}</i>
+        </div>
+      </div>
+    )
+}
+
+
+const KPI = {
+  "location": "China",
+  "server": "LM(e)",
+  "context": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.",
+  "statusIcon": "tick",
+  "status": "Working properly",
+  "date": "2020-11-23 15:36",
+  "update": "loading"
+};
+
 
 const stackedBarOptions = {
-  "title": "Stacked bar (discrete)",
+  "title": "Tasks per Environment",
   "axes": {
     "left": {
       "mapsTo": "value",
@@ -46,90 +94,46 @@ const stackedBarOptions = {
   "height": "400px"
 };
 
-const simpleBarOptions = {
-  "title": "Simple bar (discrete)",
+const GroupedBarOptions = {
+  "title": "Status of Task in Release",
   "axes": {
     "left": {
       "mapsTo": "value"
     },
     "bottom": {
-      "mapsTo": "group",
-      "scaleType": "labels"
+      "scaleType": "labels",
+      "mapsTo": "key"
     }
   },
   "height": "400px"
 };
 
 const pieOptions = {
-  "title": "Pie",
+  "title": "Space Usage per App",
   "resizable": true,
   "height": "400px"
 };
 
 const lineOptions = {
-  "title": "Line (discrete)",
+  "title": "Release in Jan, 2019",
   "axes": {
     "bottom": {
-      "title": "2019 Annual Sales Figures",
-      "mapsTo": "key",
-      "scaleType": "labels"
+      "title": "Date ",
+      "mapsTo": "date",
+      "scaleType": "time"
     },
     "left": {
       "mapsTo": "value",
-      "title": "Conversion rate",
+      "title": "Release Count",
       "scaleType": "linear"
     }
   },
-  "height": "400px"
-};
-
-const ComboOptions = {
-  "experimental": true,
-  "title": "Combo (Line + Simple bar) - custom configs",
-  "axes": {
-    "left": {
-      "mapsTo": "value",
-      "scaleType": "linear",
-      "title": "USA Summer School Attendance"
-    },
-    "right": {
-      "mapsTo": "temp",
-      "scaleType": "linear",
-      "title": "Temperature (°F)",
-      "correspondingDatasets": [
-        "Temperature"
-      ]
-    },
-    "bottom": {
-      "title": "Day of the Week",
-      "mapsTo": "date",
-      "scaleType": "labels"
-    }
-  },
-  "comboChartTypes": [
-    {
-      "type": "simple-bar",
-      "correspondingDatasets": [
-        "School A"
-      ]
-    },
-    {
-      "type": "line",
-      "options": {
-        "points": {
-          "radius": 5
-        }
-      },
-      "correspondingDatasets": [
-        "Temperature"
-      ]
-    }
-  ],
+  "curve": "curveMonotoneX",
   "height": "400px"
 };
 
 const GaugeOptions = {
-  "title": "Gauge semicircular -- danger status",
+  "title": "Code Danger Status",
   "resizable": true,
   "height": "250px",
   "width": "100%",
@@ -137,6 +141,41 @@ const GaugeOptions = {
     "type": "semi",
     "status": "danger"
   }
+};
+
+const StackedBarFilterOptions = {
+  "title": "Deployment Status",
+  "axes": {
+    "left": {
+      "mapsTo": "value",
+      "stacked": true
+    },
+    "bottom": {
+      "mapsTo": "date",
+      "scaleType": "time"
+    }
+  },
+  "experimental": true,
+  "toolbar": {
+    "enabled": true,
+    "controls": [
+      {
+        "type": "Zoom in"
+      },
+      {
+        "type": "Zoom out"
+      },
+      {
+        "type": "Reset zoom"
+      }
+    ]
+  },
+  "zoomBar": {
+    "top": {
+      "enabled": true
+    }
+  },
+  "height": "400px"
 };
 
 const Fade16 = () => (
@@ -182,6 +221,30 @@ const structuredListBodyRowGenerator = (numRows) => {
     </StructuredListRow>
   ));
 };
+
+const styleDivStatus = {
+  backgroundColor: 'green',
+
+};
+const styleDivPending = {
+  backgroundColor: 'yellow',
+
+};
+const styleDivPipeline = {
+  backgroundColor: 'blue',
+
+};
+
+// Bootstrap
+  /*
+    .clearfix::after {
+      display: block;
+      clear: both;
+      content: "";
+    }
+  */
+//  定义一个 clearfix 的 class 然后应用到 Column 上，起到清除浮动的作用
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -190,323 +253,377 @@ class App extends React.Component {
   state = {
     stackedBarData: [
       {
-        "group": "Dataset 1",
-        "key": "Qty",
+        "group": "PDN",
+        "key": "Task1",
         "value": 65000
       },
       {
-        "group": "Dataset 1",
-        "key": "More",
+        "group": "PDN",
+        "key": "Task2",
         "value": 29123
       },
       {
-        "group": "Dataset 1",
-        "key": "Sold",
+        "group": "PDN",
+        "key": "Task3",
         "value": 35213
       },
       {
-        "group": "Dataset 1",
-        "key": "Restocking",
+        "group": "PDN",
+        "key": "Task4",
         "value": 51213
       },
       {
-        "group": "Dataset 1",
-        "key": "Misc",
+        "group": "PDN",
+        "key": "Task5",
         "value": 16932
       },
       {
-        "group": "Dataset 2",
-        "key": "Qty",
+        "group": "QUA",
+        "key": "Task1",
         "value": 32432
       },
       {
-        "group": "Dataset 2",
-        "key": "More",
+        "group": "QUA",
+        "key": "Task2",
         "value": 21312
       },
       {
-        "group": "Dataset 2",
-        "key": "Sold",
+        "group": "QUA",
+        "key": "Task3",
         "value": 56456
       },
       {
-        "group": "Dataset 2",
-        "key": "Restocking",
+        "group": "QUA",
+        "key": "Task4",
         "value": 21312
       },
       {
-        "group": "Dataset 2",
-        "key": "Misc",
+        "group": "QUA",
+        "key": "Task5",
         "value": 34234
       },
       {
-        "group": "Dataset 3",
-        "key": "Qty",
+        "group": "ITG",
+        "key": "Task1",
         "value": 12312
       },
       {
-        "group": "Dataset 3",
-        "key": "More",
+        "group": "ITG",
+        "key": "Task2",
         "value": 23232
       },
       {
-        "group": "Dataset 3",
-        "key": "Sold",
+        "group": "ITG",
+        "key": "Task3",
         "value": 34232
       },
       {
-        "group": "Dataset 3",
-        "key": "Restocking",
+        "group": "ITG",
+        "key": "Task4",
         "value": 12312
       },
       {
-        "group": "Dataset 3",
-        "key": "Misc",
+        "group": "ITG",
+        "key": "Task5",
         "value": 34234
       },
       {
-        "group": "Dataset 4",
-        "key": "Qty",
+        "group": "UNT",
+        "key": "Task1",
         "value": 32423
       },
       {
-        "group": "Dataset 4",
-        "key": "More",
+        "group": "UNT",
+        "key": "Task2",
         "value": 21313
       },
       {
-        "group": "Dataset 4",
-        "key": "Sold",
+        "group": "UNT",
+        "key": "Task3",
         "value": 64353
       },
       {
-        "group": "Dataset 4",
-        "key": "Restocking",
+        "group": "UNT",
+        "key": "Task4",
         "value": 24134
       },
       {
-        "group": "Dataset 4",
-        "key": "Misc",
+        "group": "UNT",
+        "key": "Task5",
         "value": 32423
       }
     ],
-    simpleBarData: [
+    GroupedBarData: [
       {
-        "group": "Qty",
-        "value": 65000
+        "group": "Opened",
+        "key": "Rls1",
+        "value": 650
       },
       {
-        "group": "More",
-        "value": 29123
+        "group": "Opened",
+        "key": "Rls2",
+        "value": 291
       },
       {
-        "group": "Sold",
-        "value": 35213
+        "group": "Opened",
+        "key": "Rls3",
+        "value": 213
       },
       {
-        "group": "Restocking",
-        "value": 51213
+        "group": "Opened",
+        "key": "Rls4",
+        "value": 512
       },
       {
-        "group": "Misc",
-        "value": 16932
+        "group": "Opened",
+        "key": "Rls5",
+        "value": 169
+      },
+      {
+        "group": "Closed",
+        "key": "Rls1",
+        "value": 324
+      },
+      {
+        "group": "Closed",
+        "key": "Rls2",
+        "value": 213
+      },
+      {
+        "group": "Closed",
+        "key": "Rls3",
+        "value": 564
+      },
+      {
+        "group": "Closed",
+        "key": "Rls4",
+        "value": 312
+      },
+      {
+        "group": "Closed",
+        "key": "Rls5",
+        "value": 234
       }
     ],
     pieData: [
       {
-        "group": "2V2N 9KYPM version 1",
+        "group": "App1",
         "value": 20000
       },
       {
-        "group": "L22I P66EP L22I P66EP L22I P66EP",
+        "group": "App2",
         "value": 65000
       },
       {
-        "group": "JQAI 2M4L1",
+        "group": "App3",
         "value": 75000
       },
       {
-        "group": "J9DZ F37AP",
+        "group": "App4",
         "value": 1200
       },
       {
-        "group": "YEL48 Q6XK YEL48",
+        "group": "App5",
         "value": 10000
       },
       {
-        "group": "Misc",
+        "group": "App6",
         "value": 25000
       }
     ],
     lineData: [
       {
-        "group": "Dataset 1",
-        "key": "Qty",
-        "value": 34200
+        "group": "Base Release",
+        "date": "2018-12-31T16:00:00.000Z",
+        "value": 50000,
+        "surplus": 985797498.476142
       },
       {
-        "group": "Dataset 1",
-        "key": "More",
-        "value": 23500
+        "group": "Base Release",
+        "date": "2019-01-04T16:00:00.000Z",
+        "value": 65000,
+        "surplus": 679612687.4356447
       },
       {
-        "group": "Dataset 1",
-        "key": "Sold",
-        "value": 53100
+        "group": "Base Release",
+        "date": "2019-01-07T16:00:00.000Z",
+        "value": null,
+        "surplus": 12781.15548292859
       },
       {
-        "group": "Dataset 1",
-        "key": "Restocking",
-        "value": 42300
+        "group": "Base Release",
+        "date": "2019-01-12T16:00:00.000Z",
+        "value": 49213,
+        "surplus": 273767631.1197295
       },
       {
-        "group": "Dataset 1",
-        "key": "Misc",
-        "value": 12300
+        "group": "Base Release",
+        "date": "2019-01-16T16:00:00.000Z",
+        "value": 51213,
+        "surplus": 335695408.3486776
       },
       {
-        "group": "Dataset 2",
-        "key": "Qty",
-        "value": 34200
+        "group": "Build Release",
+        "date": "2019-01-01T16:00:00.000Z",
+        "value": 0,
+        "surplus": 13085.612632446391
       },
       {
-        "group": "Dataset 2",
-        "key": "More",
-        "value": 53200
+        "group": "Build Release",
+        "date": "2019-01-05T16:00:00.000Z",
+        "value": 57312,
+        "surplus": 669723396.9037101
       },
       {
-        "group": "Dataset 2",
-        "key": "Sold",
-        "value": 42300
+        "group": "Build Release",
+        "date": "2019-01-07T16:00:00.000Z",
+        "value": 27432,
+        "surplus": 186302994.77014175
       },
       {
-        "group": "Dataset 2",
-        "key": "Restocking",
-        "value": 21400
+        "group": "Build Release",
+        "date": "2019-01-14T16:00:00.000Z",
+        "value": 70323,
+        "surplus": 1003076676.7852507
       },
       {
-        "group": "Dataset 2",
-        "key": "Misc",
-        "value": 0
+        "group": "Build Release",
+        "date": "2019-01-18T16:00:00.000Z",
+        "value": 21300,
+        "surplus": 200402318.5217033
       },
       {
-        "group": "Dataset 3",
-        "key": "Qty",
-        "value": 41200
+        "group": "Delta Release",
+        "date": "2018-12-31T16:00:00.000Z",
+        "value": 50000,
+        "surplus": 1116574121.9632893
       },
       {
-        "group": "Dataset 3",
-        "key": "More",
-        "value": 18400
+        "group": "Delta Release",
+        "date": "2019-01-04T16:00:00.000Z",
+        "value": null,
+        "surplus": 7855.563849988673
       },
       {
-        "group": "Dataset 3",
-        "key": "Sold",
-        "value": 34210
+        "group": "Delta Release",
+        "date": "2019-01-07T16:00:00.000Z",
+        "value": 18000,
+        "surplus": 169266423.42736316
       },
       {
-        "group": "Dataset 3",
-        "key": "Restocking",
-        "value": 1400
+        "group": "Delta Release",
+        "date": "2019-01-12T16:00:00.000Z",
+        "value": 39213,
+        "surplus": 665790936.7589194
       },
       {
-        "group": "Dataset 3",
-        "key": "Misc",
-        "value": 42100
-      },
-      {
-        "group": "Dataset 4",
-        "key": "Qty",
-        "value": 22000
-      },
-      {
-        "group": "Dataset 4",
-        "key": "More",
-        "value": 1200
-      },
-      {
-        "group": "Dataset 4",
-        "key": "Sold",
-        "value": 9000
-      },
-      {
-        "group": "Dataset 4",
-        "key": "Restocking",
-        "value": 24000,
-        "audienceSize": 10
-      },
-      {
-        "group": "Dataset 4",
-        "key": "Misc",
-        "value": 3000,
-        "audienceSize": 10
-      }
-    ],
-
-    ComboData: [
-      {
-        "group": "School A",
-        "date": "Monday",
-        "value": 10000
-      },
-      {
-        "group": "School A",
-        "date": "Tuesday",
-        "value": 65000
-      },
-      {
-        "group": "School A",
-        "date": "Wednesday",
-        "value": 30000
-      },
-      {
-        "group": "School A",
-        "date": "Thursday",
-        "value": 49213
-      },
-      {
-        "group": "School A",
-        "date": "Friday",
-        "value": 49213
-      },
-      {
-        "group": "Temperature",
-        "date": "Monday",
-        "temp": 70
-      },
-      {
-        "group": "Temperature",
-        "date": "Tuesday",
-        "temp": 75
-      },
-      {
-        "group": "Temperature",
-        "date": "Wednesday",
-        "temp": 31
-      },
-      {
-        "group": "Temperature",
-        "date": "Thursday",
-        "temp": 31
-      },
-      {
-        "group": "Temperature",
-        "date": "Friday",
-        "temp": 43
+        "group": "Delta Release",
+        "date": "2019-01-16T16:00:00.000Z",
+        "value": 61213,
+        "surplus": 1314684321.2544932
       }
     ],
 
     GaugeData: [
       {
         "group": "value",
-        "value": 42
+        "value": 92
       },
       {
         "group": "delta",
-        "value": -13.37
+        "value": -5
+      }
+    ],
+
+    StackedBarFilterData: [
+      {
+        "group": "Success",
+        "date": "2018-12-31T16:00:00.000Z",
+        "value": 10000
+      },
+      {
+        "group": "Success",
+        "date": "2019-01-04T16:00:00.000Z",
+        "value": 65000
+      },
+      {
+        "group": "Success",
+        "date": "2019-01-07T16:00:00.000Z",
+        "value": 10000
+      },
+      {
+        "group": "Success",
+        "date": "2019-01-12T16:00:00.000Z",
+        "value": 49213
+      },
+      {
+        "group": "Success",
+        "date": "2019-01-16T16:00:00.000Z",
+        "value": 51213
+      },
+      {
+        "group": "Success",
+        "date": "2019-01-02T16:00:00.000Z",
+        "value": 75000
+      },
+      {
+        "group": "Success",
+        "date": "2019-01-05T16:00:00.000Z",
+        "value": 57312
+      },
+      {
+        "group": "Failed",
+        "date": "2019-01-07T16:00:00.000Z",
+        "value": 21432
+      },
+      {
+        "group": "Failed",
+        "date": "2019-01-14T16:00:00.000Z",
+        "value": 70323
+      },
+      {
+        "group": "Failed",
+        "date": "2019-01-18T16:00:00.000Z",
+        "value": 21300
+      },
+      {
+        "group": "Failed",
+        "date": "2018-12-31T16:00:00.000Z",
+        "value": 50000
+      },
+      {
+        "group": "Failed",
+        "date": "2019-01-04T16:00:00.000Z",
+        "value": 15000
+      },
+      {
+        "group": "Schedule",
+        "date": "2019-01-07T16:00:00.000Z",
+        "value": 20000
+      },
+      {
+        "group": "Schedule",
+        "date": "2019-01-12T16:00:00.000Z",
+        "value": 39213
+      },
+      {
+        "group": "Schedule",
+        "date": "2019-01-16T16:00:00.000Z",
+        "value": 61213
+      },
+      {
+        "group": "Schedule",
+        "date": "2019-01-01T16:00:00.000Z",
+        "value": 10
+      },
+      {
+        "group": "Schedule",
+        "date": "2019-01-05T16:00:00.000Z",
+        "value": 37312
       }
     ]
   };
+
 
   render() {
     return (
@@ -535,7 +652,7 @@ class App extends React.Component {
             </HeaderGlobalAction>
           </HeaderGlobalBar>
         </Header>
-
+        
         {/* Left Panel bar */}
         {/* <SideNav
           isFixedNav
@@ -557,8 +674,234 @@ class App extends React.Component {
             </SideNavMenu>
           </SideNavItems>
         </SideNav> */}
-          {/* Chart */}          
 
+        <br></br>
+        <br></br>
+        {/* Overview */}
+        <Grid fullwidth>
+          <Row>
+            <Column sm={1} md={2} lg={2}>
+              <DemoContent>
+                <ChartKPI></ChartKPI>
+              </DemoContent>
+            </Column>
+            <Column sm={1} md={2} lg={2}>
+              <DemoContent>
+                <div style={styleDivStatus}>
+                  <h4>US-LM(i)</h4>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</p>
+                  <p>LM(i)</p>
+                  <i>icon</i>
+                  <span>Working properly</span>
+                  <span>Updated on date()</span>
+                  <i> loading</i>
+                </div>
+              </DemoContent>
+            </Column>
+            <Column sm={1} md={2} lg={2}>
+              <DemoContent>
+                <div style={styleDivStatus}>
+                  <h4>JP-LM(e)</h4>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</p>
+                  <p>LM(e)</p>
+                  <i>icon</i>
+                  <span>Working properly</span>
+                  <span>Updated on date()</span>
+                  <i> loading</i>
+                </div>
+              </DemoContent>
+            </Column>
+            <Column className="pendingCSS" sm={1} md={8} lg={6}>
+              <DemoContent>
+                <div style={styleDivPending}>
+                  {/* StruturedList */}
+                  {/* <div class="container"> */}
+                    <StructuredListWrapper selection>
+                      {/* List Head */}
+                      <StructuredListHead>
+                        <StructuredListRow head>
+                          <StructuredListCell head>Pending Requests</StructuredListCell>
+                          <StructuredListCell head>{' '}</StructuredListCell>
+                          <StructuredListCell head>{' '}</StructuredListCell>
+                          <StructuredListCell head>
+                            <span> n to be completed</span>
+                          </StructuredListCell> 
+                        </StructuredListRow>
+                      </StructuredListHead>
+                      {/* List Body */}
+                      <StructuredListBody>
+                        {structuredListBodyRowGenerator(8)}
+                      </StructuredListBody>
+                    </StructuredListWrapper>
+                  {/* </div> */}
+                </div>
+              </DemoContent>
+            </Column>
+            <Column className="pipelineCSS" sm={1} md={2} lg={6}>
+              <DemoContent>
+                <>
+                  <div>
+                      <p style={{float: "left"}}>Pipelines</p>
+                      <button style={{float: "right"}}>View all pipelines</button>
+                  </div>
+                  <br></br>
+                  <hr></hr>
+                  <div>
+                    <div>
+                      <div>
+                        <span style={{float: "left"}}>Group1/App1/Release1</span>
+                        &nbsp;&nbsp;
+                        <span>LM(e)</span>
+                      </div>
+                      <ProgressIndicator  
+                        vertical={boolean('Vertical (vertical)', false)}
+                        currentIndex={number('Current progress (currentIndex)', 1)}
+                        spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
+                        <ProgressStep
+                          label={text('Label (label)', 'Release')}
+                          description="Finished"
+                          secondaryLabel="Created"
+                        />
+                        <ProgressStep
+                          label="QUA"
+                          description="Running"
+                          secondaryLabel="3 Created"
+                          renderLabel={() => (
+                            <Tooltip  
+                              direction="bottom"
+                              showIcon={false}
+                              triggerClassName={`${prefix}--progress-label`}
+                              triggerText={'Environment'}
+                              tooltipId="tooltipId-0">
+                              <p>Overflow tooltip content.</p>
+                            </Tooltip>
+                          )}
+                        />
+                        <ProgressStep
+                          label="Tasks"
+                          description="Await"
+                          secondaryLabel="5 Created"
+                          renderLabel={() => (
+                            <Tooltip
+                              direction="top"
+                              showIcon={false}
+                              triggerClassName={`${prefix}--progress-label`}
+                              triggerText={'Tasks'}
+                              tooltipId="tooltipId-1">
+                              <p>Opened</p>
+                            </Tooltip>
+                          )}
+                        />
+                        <ProgressStep
+                          label="Deployment Profile"
+                          description="Failed"
+                          description="Creating"
+                          invalid
+                          secondaryLabel="Long"
+                        />
+                        <ProgressStep
+                          label="Last Promotion"
+                          secondaryLabel="new date()"
+                          disabled
+                        />
+                        <ProgressStep
+                          label="Last Deployment"
+                          secondaryLabel="new date()"
+                          disabled
+                        />
+                      </ProgressIndicator>
+                    </div>
+                    <br></br>
+                    <hr></hr>
+                    <div>
+                      <ProgressIndicator  
+                        vertical={boolean('Vertical (vertical)', false)}
+                        currentIndex={number('Current progress (currentIndex)', 1)}
+                        spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
+                        <ProgressStep
+                          label={text('Label (label)', 'Release')}
+                          description="Finished"
+                          secondaryLabel="Created"
+                        />
+                        <ProgressStep
+                          label="QUA"
+                          description="Running"
+                          secondaryLabel="3 Created"
+                          renderLabel={() => (
+                            <Tooltip  
+                              direction="bottom"
+                              showIcon={false}
+                              triggerClassName={`${prefix}--progress-label`}
+                              triggerText={'Environment'}
+                              tooltipId="tooltipId-0">
+                              <p>Overflow tooltip content.</p>
+                            </Tooltip>
+                          )}
+                        />
+                        <ProgressStep
+                          label="Tasks"
+                          description="Await"
+                          secondaryLabel="5 Created"
+                          renderLabel={() => (
+                            <Tooltip
+                              direction="top"
+                              showIcon={false}
+                              triggerClassName={`${prefix}--progress-label`}
+                              triggerText={'Tasks'}
+                              tooltipId="tooltipId-1">
+                              <p>Opened</p>
+                            </Tooltip>
+                          )}
+                        />
+                        <ProgressStep
+                          label="Deployment Profile"
+                          description="Failed"
+                          description="Creating"
+                          invalid
+                          secondaryLabel="Long"
+                        />
+                        <ProgressStep
+                          label="Last Promotion"
+                          secondaryLabel="new date()"
+                          disabled
+                        />
+                        <ProgressStep
+                          label="Last Deployment"
+                          secondaryLabel="new date()"
+                          disabled
+                        />
+                      </ProgressIndicator>
+                    </div>
+                  </div>
+                  
+                  </>
+              </DemoContent>
+            </Column>
+          </Row>
+        </Grid>
+
+        {/* Test Bootstrap */}
+        {/* <br></br>
+        <div class="container">
+          <p>Test Bootstrap</p>
+          <ButtonGroup>
+            <Button>left</Button>
+            <Button>middle</Button>
+            <Button>right</Button>
+          </ButtonGroup>  
+        </div>
+        <br></br> */}
+
+        {/* <div class="container">
+          <div>Overview</div>
+          <div class="col-md-3 col-sm-3 col-xs-3 pull-left" style={{styles}}>1</div>
+          <div class="col-md-3 col-sm-3 col-xs-3 pull-left" style={{height: "200px"}}>2</div>
+          <div class="col-md-3 col-sm-3 col-xs-3 pull-left" style={{height: "200px"}}>3</div>
+          <div class="col-md-3 col-sm-3 col-xs-3 pull-right" style={{height: "600px"}}>4</div>
+          <div class="clearfix col-md-9 col-sm-9 col-xs-9 pull-left" style={{height: "400px"}}>5</div>
+        </div> */}
+
+          {/* Chart */}          
           {/* <div class="container">		
             <div class="row">							
               <div class="col-md-4">
@@ -568,9 +911,9 @@ class App extends React.Component {
                   />
               </div>							
               <div class="col-md-4">
-                <SimpleBarChart
-                  data={this.state.simpleBarData}
-                  options={simpleBarOptions}
+                <GroupedBarChart
+                  data={this.state.GroupedBarData}
+                  options={GroupedBarOptions}
                 />  
               </div>							
               <div class="col-md-4">
@@ -580,6 +923,8 @@ class App extends React.Component {
                 />
               </div>							
             </div>	
+            <br></br>
+            <br></br>
             <div class="row">							
               <div class="col-md-4">
                 <LineChart
@@ -588,9 +933,9 @@ class App extends React.Component {
                 />
               </div>							
               <div class="col-md-4">
-                <ComboChart
-                  data={this.state.ComboData}
-                  options={ComboOptions}
+                <StackedBarChart
+                  data={this.state.StackedBarFilterData}
+                  options={StackedBarFilterOptions}
                 />
               </div>							
               <div class="col-md-4">
@@ -600,105 +945,11 @@ class App extends React.Component {
                 />
               </div>							
             </div>							
-          </div> */}
-
-
-          {/* StruturedList */}
-          {/* <div class="container">
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <StructuredListWrapper selection>
-              <StructuredListHead>
-                <StructuredListRow head>
-                  <StructuredListCell head>Pending Requests</StructuredListCell>
-                  <StructuredListCell head>{' '}</StructuredListCell>
-                  <StructuredListCell head>{' '}</StructuredListCell>
-                  <StructuredListCell head>
-                    <span> n to be completed</span>
-                  </StructuredListCell> 
-                </StructuredListRow>
-              </StructuredListHead>
-              <StructuredListBody>
-                {structuredListBodyRowGenerator(4)}
-              </StructuredListBody>
-            </StructuredListWrapper>
-          </div> */}
-
-
-
-
-          {/* Progress Indicator */}
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <ProgressIndicator
-            vertical={boolean('Vertical (vertical)', false)}
-            currentIndex={number('Current progress (currentIndex)', 1)}
-            spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
-            <ProgressStep
-              label={text('Label (label)', 'Release')}
-              description="Finished"
-              secondaryLabel="Created"
-            />
-            <ProgressStep
-              label="QUA"
-              description="Running"
-              secondaryLabel="3 Created"
-              renderLabel={() => (
-                <Tooltip  
-                  direction="bottom"
-                  showIcon={false}
-                  triggerClassName={`${prefix}--progress-label`}
-                  triggerText={'Environment'}
-                  tooltipId="tooltipId-0">
-                  <p>Overflow tooltip content.</p>
-                </Tooltip>
-              )}
-            />
-            <ProgressStep
-              label="Tasks"
-              description="Await"
-              secondaryLabel="5 Created"
-              renderLabel={() => (
-                <Tooltip
-                  direction="top"
-                  showIcon={false}
-                  triggerClassName={`${prefix}--progress-label`}
-                  triggerText={'Tasks'}
-                  tooltipId="tooltipId-1">
-                  <p>Opened</p>
-                </Tooltip>
-              )}
-            />
-            <ProgressStep
-              label="Deployment Profile"
-              description="Failed"
-              description="Creating"
-              invalid
-              secondaryLabel="Long"
-            />
-            <ProgressStep
-              label="Last Promotion"
-              secondaryLabel="new date()"
-              disabled
-            />
-            <ProgressStep
-              label="Last Deployment"
-              secondaryLabel="new date()"
-              disabled
-            />
-          </ProgressIndicator>
-
+          </div>
+          <br></br> */}
+          
     </div>
+      
     );
   }
 }

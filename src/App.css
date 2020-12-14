@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.pendingCSS{
+  background-color:#8a2be2;
+  /* add display and height for clear fix  */
+  display: block;
+  height: 0;
+}
+
+.pipelineCSS{
+  background-color: #61dafb;
+  clear: both;
+}
