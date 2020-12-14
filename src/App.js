@@ -12,10 +12,10 @@ import {Header, HeaderName, HeaderGlobalBar, HeaderGlobalAction } from 'carbon-c
 import { SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink} from 'carbon-components-react';
 import { Search20, Notification20, AppSwitcher20 } from '@carbon/icons-react';
 
-
 import { ProgressIndicator, ProgressStep, Tooltip} from 'carbon-components-react';
 import { withKnobs, number, boolean, text } from '@storybook/addon-knobs';
 
+// Pending Request
 import {
   StructuredListWrapper,
   StructuredListHead,
@@ -27,18 +27,15 @@ import {
 import { CheckmarkFilled16 } from '@carbon/icons-react';
 import { settings } from 'carbon-components';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-
 
 import { Grid, Row, Column } from 'carbon-components-react';
-
 
 
 // Bootstrap
 import { ButtonGroup } from 'react-bootstrap';
 // import Button from 'react-bootstrap/lib/Button';
 // format is not correct 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 // import { action } from '@storybook/addon-actions';
@@ -51,10 +48,11 @@ function DemoContent({ children }) {
       );				
 }
 
+// Chart
 function ChartKPI({}) {
     return (
       <div>
-        <div style={styleDivStatus}>
+        <div style={{backgroundColor: 'green'}}>
           <h4>{KPI.location}-{KPI.server}</h4>
           <p>{KPI.context}</p>
           <p>{KPI.server}</p>
@@ -67,7 +65,6 @@ function ChartKPI({}) {
     )
 }
 
-
 const KPI = {
   "location": "China",
   "server": "LM(e)",
@@ -77,7 +74,6 @@ const KPI = {
   "date": "2020-11-23 15:36",
   "update": "loading"
 };
-
 
 const stackedBarOptions = {
   "title": "Tasks per Environment",
@@ -222,19 +218,79 @@ const structuredListBodyRowGenerator = (numRows) => {
   ));
 };
 
-const styleDivStatus = {
-  backgroundColor: 'green',
 
-};
-const styleDivPending = {
-  backgroundColor: 'yellow',
+function Pipeline({}) {
+  return (
+    <div>
+      <div>
+        <span style={{float: "left"}}>Group1/App1/Release1</span>
+        &nbsp;
+        <span>LM(e)</span>
+      </div>
+      <br></br>
+      <ProgressIndicator  
+        vertical={boolean('Vertical (vertical)', false)}
+        currentIndex={number('Current progress (currentIndex)', 1)}
+        spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
+        <ProgressStep
+          label={text('Label (label)', 'Release')}
+          description="Finished"
+          secondaryLabel="Created"
+        />
+        <ProgressStep
+          label="QUA"
+          description="Running"   
+          secondaryLabel="3 Created"
+          renderLabel={() => (
+            <Tooltip  
+              direction="bottom"
+              showIcon={false}
+              triggerClassName={`${prefix}--progress-label`}
+              triggerText={'Environment'}
+              tooltipId="tooltipId-0">
+              <p>Overflow tooltip content.</p>
+            </Tooltip>
+          )}
+        />
+        <ProgressStep
+          label="Tasks"
+          description="Await"
+          secondaryLabel="5 Created"
+          renderLabel={() => (
+            <Tooltip
+              direction="top"
+              showIcon={false}
+              triggerClassName={`${prefix}--progress-label`}
+              triggerText={'Tasks'}
+              tooltipId="tooltipId-1">
+              <p>Opened</p>
+            </Tooltip>
+          )}
+        />
+        <ProgressStep
+          label="Deployment Profile"
+          description="Failed"
+          description="Creating"
+          invalid
+          secondaryLabel="Long"
+        />
+        <ProgressStep
+          label="Last Promotion"
+          secondaryLabel="new date()"
+          disabled
+        />
+        <ProgressStep
+          label="Last Deployment"
+          secondaryLabel="new date()"
+          disabled
+        />
+      </ProgressIndicator>
+      <br></br>
+    </div>
+  )
+}
 
-};
-const styleDivPipeline = {
-  backgroundColor: 'blue',
-
-};
-
+// 清除浮动
 // Bootstrap
   /*
     .clearfix::after {
@@ -243,13 +299,13 @@ const styleDivPipeline = {
       content: "";
     }
   */
-//  定义一个 clearfix 的 class 然后应用到 Column 上，起到清除浮动的作用
 
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  // Chart Data
   state = {
     stackedBarData: [
       {
@@ -687,33 +743,17 @@ class App extends React.Component {
             </Column>
             <Column sm={1} md={2} lg={2}>
               <DemoContent>
-                <div style={styleDivStatus}>
-                  <h4>US-LM(i)</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</p>
-                  <p>LM(i)</p>
-                  <i>icon</i>
-                  <span>Working properly</span>
-                  <span>Updated on date()</span>
-                  <i> loading</i>
-                </div>
+                <ChartKPI></ChartKPI>
               </DemoContent>
             </Column>
             <Column sm={1} md={2} lg={2}>
               <DemoContent>
-                <div style={styleDivStatus}>
-                  <h4>JP-LM(e)</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</p>
-                  <p>LM(e)</p>
-                  <i>icon</i>
-                  <span>Working properly</span>
-                  <span>Updated on date()</span>
-                  <i> loading</i>
-                </div>
+              <ChartKPI></ChartKPI>
               </DemoContent>
             </Column>
             <Column className="pendingCSS" sm={1} md={8} lg={6}>
               <DemoContent>
-                <div style={styleDivPending}>
+                <div style={{backgroundColor: 'yellow'}}>
                   {/* StruturedList */}
                   {/* <div class="container"> */}
                     <StructuredListWrapper selection>
@@ -730,7 +770,7 @@ class App extends React.Component {
                       </StructuredListHead>
                       {/* List Body */}
                       <StructuredListBody>
-                        {structuredListBodyRowGenerator(8)}
+                        {structuredListBodyRowGenerator(6)}
                       </StructuredListBody>
                     </StructuredListWrapper>
                   {/* </div> */}
@@ -742,164 +782,19 @@ class App extends React.Component {
                 <>
                   <div>
                       <p style={{float: "left"}}>Pipelines</p>
-                      <button style={{float: "right"}}>View all pipelines</button>
+                      <a href="/" style={{float: "right"}}>View all pipelines</a>
                   </div>
                   <br></br>
                   <hr></hr>
-                  <div>
-                    <div>
-                      <div>
-                        <span style={{float: "left"}}>Group1/App1/Release1</span>
-                        &nbsp;&nbsp;
-                        <span>LM(e)</span>
-                      </div>
-                      <ProgressIndicator  
-                        vertical={boolean('Vertical (vertical)', false)}
-                        currentIndex={number('Current progress (currentIndex)', 1)}
-                        spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
-                        <ProgressStep
-                          label={text('Label (label)', 'Release')}
-                          description="Finished"
-                          secondaryLabel="Created"
-                        />
-                        <ProgressStep
-                          label="QUA"
-                          description="Running"
-                          secondaryLabel="3 Created"
-                          renderLabel={() => (
-                            <Tooltip  
-                              direction="bottom"
-                              showIcon={false}
-                              triggerClassName={`${prefix}--progress-label`}
-                              triggerText={'Environment'}
-                              tooltipId="tooltipId-0">
-                              <p>Overflow tooltip content.</p>
-                            </Tooltip>
-                          )}
-                        />
-                        <ProgressStep
-                          label="Tasks"
-                          description="Await"
-                          secondaryLabel="5 Created"
-                          renderLabel={() => (
-                            <Tooltip
-                              direction="top"
-                              showIcon={false}
-                              triggerClassName={`${prefix}--progress-label`}
-                              triggerText={'Tasks'}
-                              tooltipId="tooltipId-1">
-                              <p>Opened</p>
-                            </Tooltip>
-                          )}
-                        />
-                        <ProgressStep
-                          label="Deployment Profile"
-                          description="Failed"
-                          description="Creating"
-                          invalid
-                          secondaryLabel="Long"
-                        />
-                        <ProgressStep
-                          label="Last Promotion"
-                          secondaryLabel="new date()"
-                          disabled
-                        />
-                        <ProgressStep
-                          label="Last Deployment"
-                          secondaryLabel="new date()"
-                          disabled
-                        />
-                      </ProgressIndicator>
-                    </div>
-                    <br></br>
-                    <hr></hr>
-                    <div>
-                      <ProgressIndicator  
-                        vertical={boolean('Vertical (vertical)', false)}
-                        currentIndex={number('Current progress (currentIndex)', 1)}
-                        spaceEqually={boolean('Space Equally (spaceEqually)', false)}>
-                        <ProgressStep
-                          label={text('Label (label)', 'Release')}
-                          description="Finished"
-                          secondaryLabel="Created"
-                        />
-                        <ProgressStep
-                          label="QUA"
-                          description="Running"
-                          secondaryLabel="3 Created"
-                          renderLabel={() => (
-                            <Tooltip  
-                              direction="bottom"
-                              showIcon={false}
-                              triggerClassName={`${prefix}--progress-label`}
-                              triggerText={'Environment'}
-                              tooltipId="tooltipId-0">
-                              <p>Overflow tooltip content.</p>
-                            </Tooltip>
-                          )}
-                        />
-                        <ProgressStep
-                          label="Tasks"
-                          description="Await"
-                          secondaryLabel="5 Created"
-                          renderLabel={() => (
-                            <Tooltip
-                              direction="top"
-                              showIcon={false}
-                              triggerClassName={`${prefix}--progress-label`}
-                              triggerText={'Tasks'}
-                              tooltipId="tooltipId-1">
-                              <p>Opened</p>
-                            </Tooltip>
-                          )}
-                        />
-                        <ProgressStep
-                          label="Deployment Profile"
-                          description="Failed"
-                          description="Creating"
-                          invalid
-                          secondaryLabel="Long"
-                        />
-                        <ProgressStep
-                          label="Last Promotion"
-                          secondaryLabel="new date()"
-                          disabled
-                        />
-                        <ProgressStep
-                          label="Last Deployment"
-                          secondaryLabel="new date()"
-                          disabled
-                        />
-                      </ProgressIndicator>
-                    </div>
-                  </div>
-                  
-                  </>
+                  <Pipeline></Pipeline>
+                  <Pipeline></Pipeline>
+                  <Pipeline></Pipeline>
+                </>
               </DemoContent>
             </Column>
           </Row>
         </Grid>
 
-        {/* Test Bootstrap */}
-        {/* <br></br>
-        <div class="container">
-          <p>Test Bootstrap</p>
-          <ButtonGroup>
-            <Button>left</Button>
-            <Button>middle</Button>
-            <Button>right</Button>
-          </ButtonGroup>  
-        </div>
-        <br></br> */}
-
-        {/* <div class="container">
-          <div>Overview</div>
-          <div class="col-md-3 col-sm-3 col-xs-3 pull-left" style={{styles}}>1</div>
-          <div class="col-md-3 col-sm-3 col-xs-3 pull-left" style={{height: "200px"}}>2</div>
-          <div class="col-md-3 col-sm-3 col-xs-3 pull-left" style={{height: "200px"}}>3</div>
-          <div class="col-md-3 col-sm-3 col-xs-3 pull-right" style={{height: "600px"}}>4</div>
-          <div class="clearfix col-md-9 col-sm-9 col-xs-9 pull-left" style={{height: "400px"}}>5</div>
-        </div> */}
 
           {/* Chart */}          
           {/* <div class="container">		
